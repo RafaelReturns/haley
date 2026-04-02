@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Just for Haley</title>
+  <style>
+    :root {
+      --bg-1: #17061e;
+      --bg-2: #09020f;
+      --bg-3: #040108;
+      --text: #f6effa;
+      --muted: rgba(240, 229, 247, 0.84);
+      --muted-2: rgba(240, 229, 247, 0.58);
+      --stroke: rgba(255, 255, 255, 0.14);
+      --stroke-2: rgba(255, 255, 255, 0.07);
+      --glass-dark: rgba(12, 7, 18, 0.54);
+      --glass-soft: rgba(255, 255, 255, 0.05);
+      --pink: rgba(255, 143, 210, 0.72);
+      --pink-soft: rgba(255, 143, 210, 0.20);
+      --violet: rgba(136, 110, 255, 0.70);
+      --violet-soft: rgba(136, 110, 255, 0.18);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --card-w: 388px;
+      --card-h: 520px;
+      --radius: 30px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      overflow: hidden;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(58rem 58rem at 12% 30%, rgba(165, 72, 111, 0.34), transparent 55%),
+        radial-gradient(28rem 36rem at 87% 56%, rgba(122, 105, 235, 0.16), transparent 58%),
+        radial-gradient(20rem 32rem at 96% 20%, rgba(74, 89, 222, 0.14), transparent 56%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 46%, var(--bg-3) 100%);
+      position: relative;
+      isolation: isolate;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background:
+        radial-gradient(26rem 26rem at 16% 36%, rgba(233, 123, 183, 0.12), transparent 70%),
+        radial-gradient(20rem 24rem at 84% 64%, rgba(147, 120, 255, 0.10), transparent 70%);
+      filter: blur(28px);
+      opacity: 1;
+    }
+
+    body::after {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      mix-blend-mode: screen;
+      opacity: 0.18;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(72px);
+      opacity: 0.42;
+      will-change: transform;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+
+    .blob.one {
+      width: 28rem;
+      height: 28rem;
+      left: -6rem;
+      top: 8%;
+      background: radial-gradient(circle at center, rgba(206, 93, 144, 0.34), transparent 68%);
+      animation: floatOne 16s ease-in-out infinite alternate;
+    }
+
+    .blob.two {
+      width: 24rem;
+      height: 24rem;
+      right: -4rem;
+      top: 18%;
+      background: radial-gradient(circle at center, rgba(123, 100, 255, 0.24), transparent 70%);
+      animation: floatTwo 18s ease-in-out infinite alternate;
+    }
+
+    .blob.three {
+      width: 18rem;
+      height: 10rem;
+      left: 50%;
+      bottom: 6%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at center, rgba(255, 146, 214, 0.34), transparent 72%);
+      filter: blur(56px);
+      animation: floatThree 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatOne {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(5%, 7%, 0) scale(1.08); }
+    }
+
+    @keyframes floatTwo {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-6%, 8%, 0) scale(1.06); }
+    }
+
+    @keyframes floatThree {
+      0% { transform: translate3d(-50%, 0, 0) scale(1); }
+      100% { transform: translate3d(-46%, -8%, 0) scale(1.08); }
+    }
+
+    .scene {
+      position: relative;
+      z-index: 2;
+      width: min(1140px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(300px, 400px) minmax(320px, 400px);
+      align-items: center;
+      justify-content: center;
+      gap: clamp(18px, 3vw, 34px);
+      padding: clamp(10px, 1.6vw, 18px);
+    }
+
+    .copy {
+      justify-self: end;
+      width: min(360px, 100%);
+      text-align: center;
+      transform: translateX(4px);
+      transition: opacity 900ms ease;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      font-size: 12px;
+      line-height: 1;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(236, 222, 242, 0.88);
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(42px, 5.4vw, 62px);
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+
+    .sub {
+      margin: 10px auto 0;
+      max-width: 300px;
+      color: var(--muted);
+      font-size: clamp(16px, 1.35vw, 18px);
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .hint {
+      margin: 14px auto 0;
+      font-size: 12px;
+      color: var(--muted-2);
+      letter-spacing: 0.02em;
+    }
+
+    .deck-wrap {
+      width: min(var(--card-w), 100%);
+      justify-self: start;
+    }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      height: var(--card-h);
+      filter: drop-shadow(0 36px 42px rgba(0, 0, 0, 0.45));
+      user-select: none;
+      touch-action: pan-y;
+    }
+
+    .card {
+      position: absolute;
+      inset: 0;
+      padding: 14px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      transform-origin: center center;
+      will-change: transform, opacity, filter;
+      transition:
+        transform 820ms var(--ease),
+        opacity 580ms ease,
+        filter 620ms ease,
+        box-shadow 520ms ease;
+      isolation: isolate;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.022)),
+        linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.012)),
+        linear-gradient(180deg, rgba(14,8,20,0.42), rgba(14,8,20,0.58));
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(30px) saturate(150%);
+      -webkit-backdrop-filter: blur(30px) saturate(150%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        inset 0 -1px 0 rgba(255,255,255,0.03),
+        0 24px 46px rgba(0,0,0,0.24);
+      z-index: -3;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        radial-gradient(18rem 7rem at 50% 8%, rgba(255,255,255,0.13), transparent 68%),
+        radial-gradient(14rem 6rem at 50% 103%, rgba(255, 144, 210, 0.26), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .card-mask {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: rgba(10, 6, 15, 0.28);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .shine {
+      position: absolute;
+      inset: -20%;
+      background: linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.18) 48%, rgba(255,255,255,0.06) 54%, transparent 66%);
+      transform: translateX(-140%) rotate(10deg);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .card.shine-run .shine {
+      opacity: 1;
+      animation: sweep 980ms ease;
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-140%) rotate(10deg); opacity: 0; }
+      14% { opacity: 1; }
+      100% { transform: translateX(120%) rotate(10deg); opacity: 0; }
+    }
+
+    .trail {
+      position: absolute;
+      right: 8%;
+      bottom: 14%;
+      width: 8rem;
+      height: 4rem;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(255, 141, 210, 0.58) 0%, rgba(255, 141, 210, 0.18) 35%, rgba(123, 101, 255, 0.10) 55%, transparent 78%);
+      filter: blur(22px);
+      opacity: 0;
+      transform: translateX(0) scale(0.9);
+      pointer-events: none;
+    }
+
+    .card.exit .trail {
+      animation: trailOut 880ms ease forwards;
+    }
+
+    @keyframes trailOut {
+      0% { opacity: 0; transform: translateX(0) scale(0.9); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(180px) scale(1.25); }
+    }
+
+    .card-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 10px;
+      z-index: 1;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(241, 229, 247, 0.70);
+      font-size: 11px;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+    }
+
+    .pill {
+      width: max-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.045);
+      color: rgba(244, 237, 248, 0.84);
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .content {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
+
+    .headline {
+      margin: 0;
+      max-width: 100%;
+      width: 100%;
+      font-size: clamp(20px, 2.35vw, 31px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 7;
+      overflow: hidden;
+    }
+
+    .text {
+      margin: 0;
+      max-width: 100%;
+      width: 100%;
+      font-size: 12.8px;
+      line-height: 1.48;
+      color: rgba(236, 227, 242, 0.86);
+      font-weight: 600;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 8;
+      overflow: hidden;
+    }
+
+    .footer {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #2a1430;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(249, 232, 255, 0.78));
+      box-shadow:
+        0 10px 26px rgba(255, 144, 210, 0.12),
+        0 0 0 1px rgba(255,255,255,0.18) inset;
+      transition: transform 180ms ease, box-shadow 320ms ease, opacity 220ms ease;
+    }
+
+    .btn:hover {
+      box-shadow:
+        0 14px 32px rgba(255, 144, 210, 0.18),
+        0 0 26px rgba(122, 98, 255, 0.16),
+        0 0 0 1px rgba(255,255,255,0.22) inset;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .tag {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(236, 227, 242, 0.56);
+      min-width: 0;
+      flex-shrink: 1;
+      text-align: right;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding-top: 14px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      transition: width 320ms ease, background 320ms ease, box-shadow 320ms ease, opacity 320ms ease;
+      opacity: 0.86;
+    }
+
+    .dot.active {
+      width: 24px;
+      background: linear-gradient(90deg, rgba(255, 128, 202, 0.82), rgba(137, 106, 255, 0.72));
+      box-shadow: 0 0 16px rgba(164, 117, 255, 0.24);
+      opacity: 1;
+    }
+
+    .music-toggle {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 3;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(22, 12, 30, 0.42);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 22px rgba(0,0,0,0.18);
+    }
+
+    .audio-note {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 3;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted-2);
+      font-size: 12px;
+      background: rgba(17, 10, 24, 0.34);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .card[data-pos="0"] { transform: translate3d(0, 0, 0) scale(1); opacity: 1; z-index: 8; }
+    .card[data-pos="1"] { transform: translate3d(0, -10px, 0) scale(0.978); opacity: 0.88; z-index: 7; }
+    .card[data-pos="2"] { transform: translate3d(0, -20px, 0) scale(0.956); opacity: 0.76; z-index: 6; }
+    .card[data-pos="3"] { transform: translate3d(0, -30px, 0) scale(0.934); opacity: 0.64; z-index: 5; }
+    .card[data-pos="4"] { transform: translate3d(0, -40px, 0) scale(0.912); opacity: 0.53; z-index: 4; }
+    .card[data-pos="5"] { transform: translate3d(0, -50px, 0) scale(0.89); opacity: 0.44; z-index: 3; }
+    .card[data-pos="6"] { transform: translate3d(0, -60px, 0) scale(0.868); opacity: 0.36; z-index: 2; }
+    .card[data-pos="7"] { transform: translate3d(0, -70px, 0) scale(0.846); opacity: 0.28; z-index: 1; }
+
+    .card[data-pos="1"] .card-inner,
+    .card[data-pos="2"] .card-inner,
+    .card[data-pos="3"] .card-inner,
+    .card[data-pos="4"] .card-inner,
+    .card[data-pos="5"] .card-inner,
+    .card[data-pos="6"] .card-inner,
+    .card[data-pos="7"] .card-inner {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .card[data-pos="0"] .card-inner {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .card.exit {
+      transform: translate3d(126%, 8px, 0) scale(0.975) rotate(8deg) !important;
+      opacity: 0 !important;
+      filter: blur(3px);
+      pointer-events: none;
+    }
+
+    .card.final .footer {
+      display: none;
+    }
+
+    .fade-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(5,1,8,0.16) 60%, rgba(5,1,8,0.28));
+      opacity: 0;
+      transition: opacity 1200ms ease;
+    }
+
+    body.final-mode .fade-overlay {
+      opacity: 1;
+    }
+
+    @media (max-width: 980px) {
+      .scene {
+        grid-template-columns: 1fr;
+        align-content: center;
+        justify-items: center;
+        gap: 20px;
+      }
+
+      .copy {
+        justify-self: center;
+        transform: none;
+      }
+
+      .deck-wrap {
+        justify-self: center;
+      }
+
+      .title {
+        font-size: clamp(44px, 12vw, 64px);
+      }
+
+      .sub {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      :root {
+        --card-w: min(100vw - 28px, 352px);
+        --card-h: min(62svh, 470px);
+        --radius: 24px;
+      }
+
+      .scene {
+        padding: 10px;
+        gap: 10px;
+        align-content: center;
+      }
+
+      .copy {
+        width: min(320px, 100%);
+      }
+
+      .eyebrow {
+        margin-bottom: 10px;
+        font-size: 10px;
+      }
+
+      .title {
+        font-size: clamp(34px, 11vw, 48px);
+      }
+
+      .sub {
+        margin-top: 10px;
+        max-width: 230px;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .hint {
+        font-size: 11px;
+        margin-top: 8px;
+      }
+
+      .card {
+        padding: 11px;
+      }
+
+      .card-inner {
+        gap: 8px;
+      }
+
+      .content {
+        gap: 7px;
+        margin-top: 2px;
+      }
+
+      .headline {
+        max-width: 100%;
+        width: 100%;
+        font-size: clamp(16px, 5.4vw, 22px);
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        -webkit-line-clamp: 8;
+      }
+
+      .text {
+        max-width: 100%;
+        width: 100%;
+        font-size: 11.5px;
+        line-height: 1.42;
+        -webkit-line-clamp: 7;
+      }
+
+      .btn {
+        padding: 9px 12px;
+        font-size: 12px;
+        border-radius: 14px;
+      }
+
+      .tag {
+        font-size: 11px;
+      }
+
+      .topline,
+      .pill {
+        font-size: 10px;
+      }
+
+      .music-toggle,
+      .audio-note {
+        bottom: 10px;
+        font-size: 11px;
+        padding: 9px 12px;
+      }
+
+      .music-toggle {
+        right: 10px;
+      }
+
+      .audio-note {
+        left: 10px;
+        max-width: 52vw;
+        line-height: 1.3;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+  </div>
+  <div class="fade-overlay"></div>
+
+  <main class="scene">
+    <section class="copy">
+      <p class="eyebrow">just for haley ♡</p>
+      <h1 class="title">Sənin üçün.</h1>
+      <p class="sub">Hamısı bir anda görünməsin deyə, bu dəfə hər şey qat-qat açılır.</p>
+      <p class="hint">sağa sürüşdür və ya davam et</p>
+    </section>
+
+    <section class="deck-wrap">
+      <div class="deck" id="deck">
+        <article class="card shine-run" data-pos="0">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>01 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Sənə baxanda içimdə tələsməyən, amma dayanmayan bir hiss yaranır.
+Bu hiss qəribədir… çünki nə tam sakitdir, nə də qarışıq. Sadəcə var və hər dəfə sənə baxanda bir az daha dərinləşir.
+Adını qoymağa çalışsam, bəlkə də alınmaz. Amma hiss etdiyim şey çox aydındır.
+Elə bil həyat normal axır, amma sən o axının içində seçilən tək detal olursan.
+Və nə qədər gizlətməyə çalışsam da, içimdə səni fərqli edən o hiss hər dəfə yenidən üzə çıxır.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">ilk qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="1">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>02 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Məni soruşmağın düşündüyündən daha çox şey dəyişdi.</h2>
+              <p class="text">Çünki o anlar sadəcə bir sual kimi gəlmədi. Məndə, əslində görünməyən bir boşluğu dolu hiss etdirdi. Sənin maraqlanmağın, xəbər almağın, adi görünən bir cümlənin belə içimdə böyük qalması ona görədir. Kiçik deyildi, mənə dəyən tərəfi böyük idi.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">ikinci qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="2">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>03 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Səndən gələn ani şeylər belə məndə uzun qalır.</h2>
+              <p class="text">Bir şəkil, bir baxış, bir anda gələn kiçik bir detal bəzən uzun cümlələrdən daha çox iz buraxır. Səndən gələndə isə bu hiss daha da dərin olur. Çünki onların arxasında sadəcə görüntü yox, sənin özündən bir iz qalır. Mən də o izi istəmədən yox, sevə-sevə saxlayıram.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">üçüncü qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="3">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>04 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Gözlərində uzun izah istəməyən bir sakitlik var.</h2>
+              <p class="text">Bəzi anlarda sadəcə sənə baxmaq, artıq çox şey eşitmək kimi gəlir. Sanki sözlərdən əvvəl gələn bir rahatlıq olur. Mən o rahatlığın niyə belə güclü təsir etdiyini tam izah edə bilmirəm, amma hiss etdiyim şeyin adi olmadığını çox yaxşı bilirəm. Elə bu da onu daha fərqli edir.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">dördüncü qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="4">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>05 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Sən mənim üçün sadəcə yazışdığım biri deyilsən.</h2>
+              <p class="text">Yavaş-yavaş içimdə özünə xüsusi bir yer düzəldən birisən. Elə bir yer ki, bunu bir anda yox, hiss-hiss, gün-gün etdin. Maraqlanmağın, danışıq tərzin, mənə yaxın gələn o xırda davranışların hamısı yığışıb sənin adını başqa cür yazdı. Ona görə də sən artıq sadə bir təsadüf kimi qalmırsan.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">beşinci qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="5">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>06 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Sənə aid xırda detallar belə məndə böyük qalır.</h2>
+              <p class="text">Bəzən bir insanı fərqli edən böyük şeylər olmur. Tam əksinə, ən çox yadında qalan onun heç kimin fikir verməyəcəyi xırda detallar olur. Səndə də elədir. Bir anda necə danışdığın, necə baxdığın, necə maraq göstərdiyin — hamısı bir yerdə çox dərin hiss yaradır. Və mən bunu hiss etməməzlikdən gələ bilmirəm.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">altıncı qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-pos="6">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>07 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Bəlkə də ən gözəli odur ki, bunu mənə məcbur hiss etdirmirsən.</h2>
+              <p class="text">Hər şey süni gəlmir. Heç nə zorla yaranmış kimi görünmür. Elə buna görə də təsiri daha güclü olur. Çünki bəzi insanlar həyatına birdən girib səs salır, amma tez də dağılır. Sən isə yavaş gələn, amma qalan tərəf kimi hiss olunursan. Və bəzən ən dərin təsiri məhz belə şeylər qoyur.</p>
+            </div>
+            <div class="footer">
+              <button class="btn" type="button">davam et</button>
+              <span class="tag">yedinci qat</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card final" data-pos="7">
+          <div class="card-mask"></div>
+          <div class="shine"></div>
+          <div class="trail"></div>
+          <div class="card-inner">
+            <div class="topline"><span>08 / 08</span><span>♡</span></div>
+            <span class="pill">haley ♡</span>
+            <div class="content">
+              <h2 class="headline">Ona görə bu səhifənin içində nə varsa, hamısı eyni cümləyə çıxır:</h2>
+              <p class="text">sən mənə adi gəlmirsən.
+bu, sadəcə xoşlanmaq deyil.
+bu, zaman keçdikcə azalan bir şey də deyil.
+əksinə, hər gün bir az daha aydınlaşan bir hissdir.
+sənə baxanda içimdə yaranan şey sadə maraqdan çox daha artıqdır.
+və bunu nə qədər sakit deməyə çalışsam da,
+içimdə yaratdığı təsir heç vaxt sakit olmur.
+
+bəlkə də ən doğru cümlə budur:
+sən artıq mənim üçün təsadüf deyilsən. ♡</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="dots" id="dots"></div>
+    </section>
+  </main>
+
+  <button class="music-toggle" id="musicToggle" type="button">musiqini aç</button>
+  <div class="audio-note">audio faylı əlavə ediləndə automatik işləyəcək</div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="dove-doll-version.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const dots = document.getElementById('dots');
+    const music = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let moving = false;
+    let musicOn = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    function getCards() {
+      return Array.from(deck.querySelectorAll('.card'));
+    }
+
+    function syncPositions() {
+      const cards = getCards();
+      cards.forEach((card, index) => {
+        card.dataset.pos = index;
+      });
+
+      dots.innerHTML = '';
+      cards.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.className = 'dot' + (index === 0 ? ' active' : '');
+        dots.appendChild(dot);
+      });
+
+      const first = cards[0];
+      if (first) {
+        first.classList.remove('shine-run');
+        void first.offsetWidth;
+        first.classList.add('shine-run');
+      }
+
+      if (cards.length === 1) {
+        document.body.classList.add('final-mode');
+      } else {
+        document.body.classList.remove('final-mode');
+      }
+    }
+
+    function fadeInMusic() {
+      if (!music) return;
+      music.volume = 0;
+      music.play().then(() => {
+        let vol = 0;
+        const timer = setInterval(() => {
+          vol += 0.05;
+          music.volume = Math.min(vol, 0.5);
+          if (vol >= 0.5) clearInterval(timer);
+        }, 120);
+        musicOn = true;
+        musicToggle.textContent = 'musiqini bağla';
+      }).catch(() => {
+        musicToggle.textContent = 'audio faylı əlavə et';
+      });
+    }
+
+    function fadeOutMusic() {
+      if (!music || !musicOn) return;
+      let vol = music.volume;
+      const timer = setInterval(() => {
+        vol -= 0.05;
+        music.volume = Math.max(vol, 0);
+        if (vol <= 0) {
+          clearInterval(timer);
+          music.pause();
+          musicOn = false;
+          musicToggle.textContent = 'musiqini aç';
+        }
+      }, 100);
+    }
+
+    function toggleMusic() {
+      if (musicOn) {
+        fadeOutMusic();
+      } else {
+        fadeInMusic();
+      }
+    }
+
+    function goNext() {
+      if (moving) return;
+      const cards = getCards();
+      if (cards.length <= 1) return;
+
+      moving = true;
+      const first = cards[0];
+      first.classList.add('exit');
+
+      setTimeout(() => {
+        first.remove();
+        syncPositions();
+        bindButtons();
+        moving = false;
+      }, 820);
+    }
+
+    function bindButtons() {
+      deck.querySelectorAll('.btn').forEach(btn => {
+        btn.onclick = goNext;
+      });
+    }
+
+    deck.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+    }, { passive: true });
+
+    deck.addEventListener('touchend', (e) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) && dx > 0) {
+        goNext();
+      }
+    }, { passive: true });
+
+    musicToggle.addEventListener('click', toggleMusic);
+
+    syncPositions();
+    bindButtons();
+  </script>
+</body>
+</html>
