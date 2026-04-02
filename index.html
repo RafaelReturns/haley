@@ -931,7 +931,12 @@ sən artıq mənim üçün təsadüf deyilsən. ♡</p>
     }
 
     function goNext() {
-      if (moving) return;
+
+  if (!musicOn) {
+    fadeInMusic();
+  }
+
+  if (moving) return;
       const cards = getCards();
       if (cards.length <= 1) return;
 
